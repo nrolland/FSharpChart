@@ -2277,8 +2277,13 @@ module ChartTypes =
     // ------------------------------------------------------------------------------------
     // Special types of charts - combine multiple series & create row/columns
 
-    type CombinedChart(charts:seq<GenericChart>) =
+    type CombinedChart(charts:seq<GenericChart>) as this =
         inherit GenericChart<DataSourceCombined>()
+
+        do
+          let firstChart = Seq.head charts
+          this.Area <- firstChart.Area
+          this.Legend <- firstChart.Legend
 
         override x.ChartType = enum<SeriesChartType> -1
         member x.Charts = charts
