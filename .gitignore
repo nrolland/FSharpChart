@@ -1,2 +1,10 @@
 *.suo
 F#/bin/*
+F#/samples/scripts/bin/*
+F#/samples/scripts/obj/*
+F#/samples/winforms/bin/*
+F#/samples/winforms/obj/*
+F#/samples/wpf/bin/*
+F#/samples/wpf/obj/*
+F#/source/FSharpChart/bin/*
+F#/source/FSharpChart/obj/*
