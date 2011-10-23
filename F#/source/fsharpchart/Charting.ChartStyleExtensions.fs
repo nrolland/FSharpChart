@@ -127,6 +127,14 @@ module ChartStyleExtensions =
               ToolTip |> Option.iter ch.Series.set_ToolTip
               ch
 
+          member series.Marker<'T when 'T :> GenericChart>(?Style, ?Color, ?Size, ?BorderColor, ?BorderWidth) =
+            fun (ch:'T) -> 
+              Style |> Option.iter ch.Series.set_MarkerStyle
+              Color |> Option.iter ch.Series.set_MarkerColor
+              Size |> Option.iter ch.Series.set_MarkerSize
+              BorderColor |> Option.iter ch.Series.set_MarkerBorderColor
+              BorderWidth |> Option.iter ch.Series.set_MarkerBorderWidth
+              ch
 
     type FSharpChart with 
         static member WithArea = AreaProperties()
