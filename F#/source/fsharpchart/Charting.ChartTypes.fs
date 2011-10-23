@@ -2284,6 +2284,7 @@ module ChartTypes =
           let firstChart = Seq.head charts
           this.Area <- firstChart.Area
           this.Legend <- firstChart.Legend
+          this.Margin <- firstChart.Margin
 
         override x.ChartType = enum<SeriesChartType> -1
         member x.Charts = charts
