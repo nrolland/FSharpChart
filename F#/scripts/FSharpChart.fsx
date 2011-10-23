@@ -4243,7 +4243,7 @@ module ChartStyleExtensions =
         static member WithArea = AreaProperties()
         static member WithSeries = SeriesProperties()
 
-        static member WithLegend<'T when 'T :> GenericChart>(?Title, ?Background, ?Font, ?Alignment, ?Docking, ?InsideArea) =
+        static member WithLegend<'T when 'T :> GenericChart>(?Title, ?Background, ?Font, ?Alignment, ?Docking, ?InsideArea, ?BorderColor, ?BorderDashStyle, ?BorderWidth) =
           fun (ch:'T) -> 
             let legend = new Legend()
             applyPropertyDefaults (ch.ChartType) legend
@@ -4253,6 +4253,9 @@ module ChartStyleExtensions =
             Alignment |> Option.iter legend.set_Alignment
             Docking |> Option.iter legend.set_Docking
             Title |> Option.iter legend.set_Title
+            BorderColor |> Option.iter legend.set_BorderColor
+            BorderDashStyle |> Option.iter legend.set_BorderDashStyle
+            BorderWidth |> Option.iter legend.set_BorderWidth
             ch.Legends.Add legend
             ch
       
