@@ -13,7 +13,7 @@ open MSDN.FSharp.Charting.ChartFormUtilities
 module ChartStyleExtensions = 
 
     type AreaProperties() = 
-        member area.AxisX<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name) = 
+        member area.AxisX<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
           fun (ch:'T) -> 
             //ch.Area.AxisX <- new Axis(null, AxisName.X)
             Enabled |> Option.iter ch.Area.AxisX.set_Enabled
@@ -26,9 +26,13 @@ module ChartStyleExtensions =
             MajorTickMark |> Option.iter ch.Area.AxisX.set_MajorTickMark
             MinorTickMark |> Option.iter ch.Area.AxisX.set_MinorTickMark
             Name |> Option.iter ch.Area.AxisX.set_Name
+            Title |> Option.iter ch.Area.AxisX.set_Title
+            TitleAlignment |> Option.iter ch.Area.AxisX.set_TitleAlignment
+            TitleFont |> Option.iter ch.Area.AxisX.set_TitleFont
+            TitleForeColor |> Option.iter ch.Area.AxisX.set_TitleForeColor
             ch
 
-        member area.AxisY<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name) = 
+        member area.AxisY<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
           fun (ch:'T) -> 
             //ch.Area.AxisY <- new Axis(null, AxisName.Y)
             Enabled |> Option.iter ch.Area.AxisY.set_Enabled
@@ -41,9 +45,13 @@ module ChartStyleExtensions =
             MajorTickMark |> Option.iter ch.Area.AxisY.set_MajorTickMark
             MinorTickMark |> Option.iter ch.Area.AxisY.set_MinorTickMark
             Name |> Option.iter ch.Area.AxisY.set_Name
+            Title |> Option.iter ch.Area.AxisY.set_Title
+            TitleAlignment |> Option.iter ch.Area.AxisY.set_TitleAlignment
+            TitleFont |> Option.iter ch.Area.AxisY.set_TitleFont
+            TitleForeColor |> Option.iter ch.Area.AxisY.set_TitleForeColor
             ch
 
-        member area.AxisX2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name) = 
+        member area.AxisX2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
           fun (ch:'T) -> 
             //ch.Area.AxisX <- new Axis(null, AxisName.X)
             Enabled |> Option.iter ch.Area.AxisX2.set_Enabled
@@ -56,9 +64,13 @@ module ChartStyleExtensions =
             MajorTickMark |> Option.iter ch.Area.AxisX2.set_MajorTickMark
             MinorTickMark |> Option.iter ch.Area.AxisX2.set_MinorTickMark
             Name |> Option.iter ch.Area.AxisX2.set_Name
+            Title |> Option.iter ch.Area.AxisX2.set_Title
+            TitleAlignment |> Option.iter ch.Area.AxisX2.set_TitleAlignment
+            TitleFont |> Option.iter ch.Area.AxisX2.set_TitleFont
+            TitleForeColor |> Option.iter ch.Area.AxisX2.set_TitleForeColor
             ch
 
-        member area.AxisY2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name) = 
+        member area.AxisY2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
           fun (ch:'T) -> 
             //ch.Area.AxisY <- new Axis(null, AxisName.Y)
             Enabled |> Option.iter ch.Area.AxisY2.set_Enabled
@@ -71,6 +83,10 @@ module ChartStyleExtensions =
             MajorTickMark |> Option.iter ch.Area.AxisY2.set_MajorTickMark
             MinorTickMark |> Option.iter ch.Area.AxisY2.set_MinorTickMark
             Name |> Option.iter ch.Area.AxisY2.set_Name
+            Title |> Option.iter ch.Area.AxisY2.set_Title
+            TitleAlignment |> Option.iter ch.Area.AxisY2.set_TitleAlignment
+            TitleFont |> Option.iter ch.Area.AxisY2.set_TitleFont
+            TitleForeColor |> Option.iter ch.Area.AxisY2.set_TitleForeColor
             ch
 
         member area.Style<'T when 'T :> GenericChart> (?Background) =
