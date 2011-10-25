@@ -4106,7 +4106,9 @@ open ChartTypes
 module ChartStyleExtensions = 
 
     type AreaProperties() = 
-        member area.AxisX<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
+        member area.AxisX<'T when 'T :> GenericChart>
+          ( ?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name,
+            ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor, ?ToolTip) = 
           fun (ch:'T) -> 
             //ch.Area.AxisX <- new Axis(null, AxisName.X)
             Enabled |> Option.iter ch.Area.AxisX.set_Enabled
@@ -4123,9 +4125,12 @@ module ChartStyleExtensions =
             TitleAlignment |> Option.iter ch.Area.AxisX.set_TitleAlignment
             TitleFont |> Option.iter ch.Area.AxisX.set_TitleFont
             TitleForeColor |> Option.iter ch.Area.AxisX.set_TitleForeColor
+            ToolTip |> Option.iter ch.Area.AxisX.set_ToolTip
             ch
 
-        member area.AxisY<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
+        member area.AxisY<'T when 'T :> GenericChart>
+          ( ?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name,
+            ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor, ?ToolTip) =
           fun (ch:'T) -> 
             //ch.Area.AxisY <- new Axis(null, AxisName.Y)
             Enabled |> Option.iter ch.Area.AxisY.set_Enabled
@@ -4142,9 +4147,12 @@ module ChartStyleExtensions =
             TitleAlignment |> Option.iter ch.Area.AxisY.set_TitleAlignment
             TitleFont |> Option.iter ch.Area.AxisY.set_TitleFont
             TitleForeColor |> Option.iter ch.Area.AxisY.set_TitleForeColor
+            ToolTip |> Option.iter ch.Area.AxisY.set_ToolTip
             ch
 
-        member area.AxisX2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
+        member area.AxisX2<'T when 'T :> GenericChart>
+          ( ?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name,
+            ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor, ?ToolTip) =
           fun (ch:'T) -> 
             //ch.Area.AxisX <- new Axis(null, AxisName.X)
             Enabled |> Option.iter ch.Area.AxisX2.set_Enabled
@@ -4161,9 +4169,12 @@ module ChartStyleExtensions =
             TitleAlignment |> Option.iter ch.Area.AxisX2.set_TitleAlignment
             TitleFont |> Option.iter ch.Area.AxisX2.set_TitleFont
             TitleForeColor |> Option.iter ch.Area.AxisX2.set_TitleForeColor
+            ToolTip |> Option.iter ch.Area.AxisX2.set_ToolTip
             ch
 
-        member area.AxisY2<'T when 'T :> GenericChart>(?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name, ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor) = 
+        member area.AxisY2<'T when 'T :> GenericChart>
+          ( ?Enabled, ?LabelStyle, ?IsMarginVisible, ?Maximum, ?Minimum, ?MajorGrid, ?MinorGrid, ?MajorTickMark, ?MinorTickMark, ?Name,
+            ?Title, ?TitleAlignment, ?TitleFont, ?TitleForeColor, ?ToolTip) =
           fun (ch:'T) -> 
             //ch.Area.AxisY <- new Axis(null, AxisName.Y)
             Enabled |> Option.iter ch.Area.AxisY2.set_Enabled
@@ -4180,6 +4191,7 @@ module ChartStyleExtensions =
             TitleAlignment |> Option.iter ch.Area.AxisY2.set_TitleAlignment
             TitleFont |> Option.iter ch.Area.AxisY2.set_TitleFont
             TitleForeColor |> Option.iter ch.Area.AxisY2.set_TitleForeColor
+            ToolTip |> Option.iter ch.Area.AxisY2.set_ToolTip
             ch
 
         member area.Style<'T when 'T :> GenericChart> (?Background) =
@@ -4236,20 +4248,23 @@ module ChartStyleExtensions =
               ToolTip |> Option.iter ch.Series.set_ToolTip
               ch
 
-          member series.Marker<'T when 'T :> GenericChart>(?Style, ?Color, ?Size, ?BorderColor, ?BorderWidth) =
+          member series.Marker<'T when 'T :> GenericChart> (?Color, ?Size, ?Step, ?Style, ?BorderColor, ?BorderWidth) =
             fun (ch:'T) -> 
-              Style |> Option.iter ch.Series.set_MarkerStyle
-              Color |> Option.iter ch.Series.set_MarkerColor
-              Size |> Option.iter ch.Series.set_MarkerSize
               BorderColor |> Option.iter ch.Series.set_MarkerBorderColor
               BorderWidth |> Option.iter ch.Series.set_MarkerBorderWidth
+              Color |> Option.iter ch.Series.set_MarkerColor
+              Size |> Option.iter ch.Series.set_MarkerSize
+              Step |> Option.iter ch.Series.set_MarkerStep
+              Style |> Option.iter ch.Series.set_MarkerStyle
               ch
 
     type FSharpChart with 
         static member WithArea = AreaProperties()
         static member WithSeries = SeriesProperties()
 
-        static member WithLegend<'T when 'T :> GenericChart>(?Title, ?Background, ?Font, ?Alignment, ?Docking, ?InsideArea, ?BorderColor, ?BorderDashStyle, ?BorderWidth) =
+        static member WithLegend<'T when 'T :> GenericChart>
+            ( ?Title, ?Background, ?Font, ?Alignment, ?Docking, ?InsideArea,
+              ?TitleAlignment, ?TitleFont, ?TitleForeColor, ?BorderColor, ?BorderWidth, ?BorderDashStyle) =
           fun (ch:'T) -> 
             let legend = new Legend()
             applyPropertyDefaults (ch.ChartType) legend
@@ -4259,6 +4274,9 @@ module ChartStyleExtensions =
             Alignment |> Option.iter legend.set_Alignment
             Docking |> Option.iter legend.set_Docking
             Title |> Option.iter legend.set_Title
+            TitleAlignment |> Option.iter legend.set_TitleAlignment
+            TitleFont |> Option.iter legend.set_TitleFont
+            TitleForeColor |> Option.iter legend.set_TitleForeColor
             BorderColor |> Option.iter legend.set_BorderColor
             BorderDashStyle |> Option.iter legend.set_BorderDashStyle
             BorderWidth |> Option.iter legend.set_BorderWidth
@@ -4276,8 +4294,7 @@ module ChartStyleExtensions =
             ch
 
         static member WithTitle<'T when 'T :> GenericChart>
-            ( ?Text, ?TextStyle, ?Font, ?Background, ?Color,
-              ?BorderColor, ?BorderWidth, ?BorderDashStyle, 
+            ( ?Text, ?TextStyle, ?Font, ?Background, ?Color, ?BorderColor, ?BorderWidth, ?BorderDashStyle, 
               ?TextOrientation, ?Alignment, ?Docking, ?InsideArea) =
           fun (ch:'T) ->
               let title = new Title()
@@ -4334,6 +4351,7 @@ module ChartStyleExtensions =
 
         static member Legend
             ( ?Title, ?Background, ?Alignment, ?Docking, ?InsideArea,
+              ?BorderColor, ?BorderWidth, ?BorderDashStyle, 
               ?FontName:string, ?FontFamily:FontFamily, ?FontStyle:FontStyle, ?FontSize:float32) =
               let legend = new Legend()
               InsideArea |> Option.iter legend.set_IsDockedInsideChartArea
@@ -4341,6 +4359,9 @@ module ChartStyleExtensions =
               Alignment |> Option.iter legend.set_Alignment
               Docking |> Option.iter legend.set_Docking
               Title |> Option.iter legend.set_Title
+              BorderColor |> Option.iter legend.set_BorderColor
+              BorderDashStyle |> Option.iter legend.set_BorderDashStyle
+              BorderWidth |> Option.iter legend.set_BorderWidth
               if FontName.IsSome || FontFamily.IsSome || FontStyle.IsSome || FontSize.IsSome then
                   legend.set_Font (StyleHelper.FontCreate(FontName, FontFamily, FontStyle, FontSize))
               legend

@@ -4,12 +4,20 @@
         <title>FSharpChart - Wrapping System.Windows.​Forms.DataVisua​lization.Charti​ng</title>        
         <meta name="description" content="FSharpChart contains F#-friendly wrappers for the types in the System.Windows.Forms.DataVisualization.Charting namespace (http://msdn.microsoft.com/en-us/library/system.windows.forms.datavisualization.charting.aspx), making it easy to interactively chart data from F# Interactive." />
         
-        <script src="offline.js" type="text/javascript" ></script>
-        <script type="text/javascript">
+        <script src="f6b6e866e5e2458559f00797fa79d556-f80bfd125d08096d2146234e2c03c3cb-RequestReducedScript.js" type="text/javascript" ></script><script type="text/javascript">
             function initializePage() {
-                var scriptFound = false;
                 var otherTabClass = 'otherTab';
                 var hiddenPreClass = 'hidden';
+
+                var htmlDecode = function(encodedData) {
+                    var decodedData = "";
+                    if (encodedData) {
+                        var div = document.createElement('div');
+                        div.innerHTML = encodedData;
+                        decodedData = div.firstChild.nodeValue.replace( /\\r\\n/ig , '\r\n');
+                    }
+                    return decodedData;
+                };
                 
                 Galleries.iterateElem(Galleries.findElem(null, 'div', 'scriptcode'), function (index, scriptBlock) {
                     var titleElem = Galleries.findElem(scriptBlock, 'div', 'title')[0];
@@ -25,7 +33,7 @@
                             var labelSpan = elem;
                             var languageSpan = languageSpans[index];
                             
-                            elem.code = codePre.innerHTML.replace( /(\r(\n)?)|((\r)?\n)/ig , '\r\n');
+                            elem.code = codePre.innerHTML.replace( /(\r(\n)?)|((\r)?\n)/ig , '\\r\\n');
                             
                             codePre.className = codePre.className.replace(hiddenPreClass, '');
                             
@@ -72,7 +80,7 @@
                             copyLink.className = 'copyCode';
                             copyLink.innerHTML = 'Copy Code';
                             Galleries.attachEventHandler(copyLink, 'click', function (e) {
-                                clipboardData.setData("Text", labelElems[scriptBlock.activeTab].code);
+                                clipboardData.setData("Text", htmlDecode(labelElems[scriptBlock.activeTab].code));
                                 return false;
                             });
                             scriptBlock.insertBefore(copyLink, scriptBlock.childNodes[0]);
@@ -121,6 +129,7 @@
 0.4 - Property Change Events for Name, Title, Margin, Legend, and Custom properties.</p>
 <p>0.5 - Support for 3D Charts and naming of data series for BoxPlot charts</p>
 <p>0.55 - Support for defaults and ToolTip's in addition to some WPF samples</p>
+<p>0.56 - Minor changes for additional With properties and WithSeries.Marker()</p>
 <p>A minor change has been added to support naming form windows with the chart type and for FastLines binding.<br>
 <br>
 In version 0.4 the solution is broken down into individual FS source files. The root directory of the ZIP download however still contains a FSX file containing all the source code in a single script file; FSharpChart.fsx.</p>

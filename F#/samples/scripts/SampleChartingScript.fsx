@@ -35,6 +35,7 @@ pie.GetType().BaseType.BaseType.GetProperty("Data", enum<System.Reflection.Bindi
 // Generating X and Y values (as tuples)
 [ for i in 1. .. 20. .. 1000.0 -> i, rnd.NextDouble() ]
 |> FSharpChart.Line
+|> FSharpChart.WithSeries.Marker(Style=MarkerStyle.Star4, Color=Color.Black)
 
 // Generate a circle and save to clipboard
 [ let radius = 5.0
