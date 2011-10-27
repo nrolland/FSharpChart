@@ -2281,10 +2281,10 @@ module ChartTypes =
         inherit GenericChart<DataSourceCombined>()
 
         do
-          let firstChart = Seq.head charts
-          this.Area <- firstChart.Area
-          this.Legend <- firstChart.Legend
-          this.Margin <- firstChart.Margin
+            let firstChart = Seq.head charts
+            this.Area <- firstChart.Area
+            this.Legend <- firstChart.Legend
+            this.Margin <- firstChart.Margin
 
         override x.ChartType = enum<SeriesChartType> -1
         member x.Charts = charts

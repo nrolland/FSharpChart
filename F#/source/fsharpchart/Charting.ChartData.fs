@@ -9,6 +9,7 @@ open System.Windows.Forms.DataVisualization.Charting
 
 open MSDN.FSharp.Charting
 open MSDN.FSharp.Charting.ChartStyles
+open MSDN.FSharp.Charting.ChartFormUtilities
 
 module ChartData = 
 
@@ -26,6 +27,10 @@ module ChartData =
             | XMultiYValues of IEnumerable * IEnumerable[]    
             | XMultiYValuesChanging of int * IObservable<IConvertible * float[]>
 
+            // stacked values
+            | StackedYValues of seq<IEnumerable>
+            | StackedXYValues of seq<IEnumerable * IEnumerable>
+
             // This one is treated specially (for box plot, we need to add data as a separate series)
             // TODO: This is a bit inconsistent - we should unify the next one with the last 
             // four and then handle boxplot chart type when adding data to the series
@@ -34,7 +39,6 @@ module ChartData =
             // A version of BoxPlot arrays with X values is missing (could be useful)
             // Observable version is not supported (probably nobody needs it)
             // (Unifying would sovlve these though)
-
 
         // ----------------------------------------------------------------------------------
         // Utilities for working with enumerable and tuples
@@ -190,6 +194,17 @@ module ChartData =
           let series = (source |> Seq.map (fun item -> cobj (fst item), map cval (snd item)))
           ChartData.BoxPlotXYArrays(series)
 
+        // ----------------------------------------------------------------------------------
+        // Stacked sequence values
+
+        // Sequence of Y Values only
+        let seqY (source:list<list<'TY>>) = 
+            ChartData.StackedYValues (source |> List.map (map cval))
+        // Sequence of X and Y Values only
+        let seqXY (source: list<list<'TX * 'TY>>) = 
+            let series = (source |> List.map (fun item -> List.unzip item |> (fun itemXY -> (map cobj (fst itemXY), map cval (snd itemXY))) ))
+            ChartData.StackedXYValues (series)
+
         // --------------------------------------------------------------------------------------
 
         let internal bindObservable (chart:Chart) (series:Series) maxPoints values adder = 
@@ -211,29 +226,39 @@ module ChartData =
             ()
 
 
-        let internal setSeriesData resetSeries (series:Series) data (chart:Chart) setCustomProperty =
-            let bindBoxPlot values getSeries getLabel (displayLabel:bool) =
+        let internal setSeriesData resetSeries (series:Series) data (chart:Chart) setCustomProperty =             
+
+            let bindBoxPlot values getSeries getLabel (displayLabel:bool) = 
                 let labels = chart.ChartAreas.[0].AxisX.CustomLabels
-                if resetSeries then 
-                    labels.Clear()     
-                let name = series.Name                
+                let name = series.Name
+                if resetSeries then
+                    labels.Clear()
+                    while chart.Series.Count > 1 do chart.Series.RemoveAt(1)                                 
                 let seriesNames = 
-                  values |> Seq.mapi (fun index series ->
-                    let name = getLabel name index series
-                    let dataSeries = new Series(name, Enabled = false)
-                    dataSeries.Points.DataBindY [| getSeries series |]
-                    if displayLabel then
-                        labels.Add(float (index), float (index + 2), name) |> ignore
-                        dataSeries.AxisLabel <- name
-                        dataSeries.Label <- name
-                    if resetSeries then
-                        match chart.Series.IndexOf name with
-                        | replaceIdx when replaceIdx >= 0 -> chart.Series.RemoveAt replaceIdx
-                        | _ -> ()
-                    chart.Series.Add dataSeries
-                    name )
+                    values |> Seq.mapi (fun index series ->
+                        let name = getLabel name index series
+                        let dataSeries = new Series(name, Enabled = false, ChartType=SeriesChartType.BoxPlot)
+                        dataSeries.Points.DataBindY [| getSeries series |]
+                        if displayLabel then
+                            labels.Add(float (index), float (index + 2), name) |> ignore
+                            dataSeries.AxisLabel <- name
+                            dataSeries.Label <- name
+                        chart.Series.Add dataSeries
+                        name )
                 let boxPlotSeries = seriesNames |> String.concat ";"
                 setCustomProperty("BoxPlotSeries", boxPlotSeries)
+
+            let bindStackedChart values binder =                
+                let name = series.Name
+                let chartType = series.ChartType       
+                while chart.Series.Count > 0 do chart.Series.RemoveAt(0)        
+                values |> Seq.iteri (fun index seriesValue ->
+                    let name = sprintf "Stacked_%s_%d" name index
+                    let dataSeries = new Series(name, Enabled = false, ChartType=chartType)
+                    applyProperties dataSeries series
+                    dataSeries.Name <- name
+                    binder dataSeries seriesValue
+                    chart.Series.Add dataSeries)
 
             match data with 
             // Single Y value 
@@ -260,9 +285,15 @@ module ChartData =
             
             // Special case for BoxPlot
             | ChartData.BoxPlotYArrays values ->
-                bindBoxPlot values (fun value -> value) (fun name index value -> sprintf "%s_%d" name index) false
+                bindBoxPlot values (fun value -> value) (fun name index value -> sprintf "Boxplot_%s_%d" name index) false
             | ChartData.BoxPlotXYArrays values ->
                 bindBoxPlot values (snd) (fun name index value -> string (fst value)) true
+
+            // Special case for Stacked
+            | ChartData.StackedYValues values ->
+                bindStackedChart values (fun (dataSeries:Series) seriesValue -> dataSeries.Points.DataBindY [| seriesValue |])
+            | ChartData.StackedXYValues values ->
+                bindStackedChart values (fun (dataSeries:Series) seriesValue -> dataSeries.Points.DataBindXY((fst seriesValue), ([| snd seriesValue |])))
 
     // ----------------------------------------------------------------------------------
     // Types that represent data loaded on a chart (and can be used to 
@@ -288,6 +319,7 @@ module ChartData =
             | Some series -> 
                 match (chart, setCustomProperty) with
                 | (Some ch, Some property) -> setSeriesData true series data ch property
+                | (Some ch, _) -> setSeriesData true series data ch ignore
                 | (_, _) -> setSeriesData true series data null ignore                 
         override x.BindSeries(seriesSeq) =
             match List.ofSeq seriesSeq with
@@ -354,6 +386,13 @@ module ChartData =
             base.SetDataInternal(sixXYArrBox data, chartBinder.Chart, chartBinder.SetCustomProperty)
         member x.SetData(data:seq<'TYValue[]>, chartBinder:ChartBinder<string>) = 
             base.SetDataInternal(sixYArrBox data, chartBinder.Chart, chartBinder.SetCustomProperty)
+
+    type StackedValue() =
+        inherit DataSourceSingleSeries()
+        member x.SetData(data: list<list<'TY>>, chartBinder:ChartBinder<string>) =
+            base.SetDataInternal(seqY data, chartBinder.Chart)
+        member x.SetData(data: list<list<'TX * 'TY>>, chartBinder:ChartBinder<string>) =
+            base.SetDataInternal(seqXY data, chartBinder.Chart)
 
 
     type DataSourceCombined() = 

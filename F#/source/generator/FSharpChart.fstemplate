@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------
-// Charting API for F# (version 0.55)
+// Charting API for F# (version 0.60)
 // --------------------------------------------------------------------------------------
 
 #nowarn "40"
@@ -21,8 +21,8 @@ open System.Windows.Forms.DataVisualization.Charting
 
 #file "Charting.ClipboardMetafileHelper.fs"
 #file "Charting.ChartStyles.fs"
-#file "Charting.ChartData.fs"
 #file "Charting.ChartFormUtilities.fs"
+#file "Charting.ChartData.fs"
 #file "Charting.ChartTypes.fs"
 #file "Charting.ChartControl.fs"
 #file "Charting.FSharpChart.fs"

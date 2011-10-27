@@ -38,8 +38,8 @@
     <Compile Include="Charting.ClipboardMetafileHelper.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Charting.ChartStyles.fs" />
-    <Compile Include="Charting.ChartData.fs" />
     <Compile Include="Charting.ChartFormUtilities.fs" />
+    <Compile Include="Charting.ChartData.fs" />
     <Compile Include="Charting.ChartTypes.fs" />
     <Compile Include="Charting.ChartControl.fs" />
     <Compile Include="Charting.FSharpChart.fs" />

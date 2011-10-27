@@ -35,7 +35,7 @@ pie.GetType().BaseType.BaseType.GetProperty("Data", enum<System.Reflection.Bindi
 // Generating X and Y values (as tuples)
 [ for i in 1. .. 20. .. 1000.0 -> i, rnd.NextDouble() ]
 |> FSharpChart.Line
-|> FSharpChart.WithSeries.Marker(Style=MarkerStyle.Star4, Color=Color.Black)
+|> FSharpChart.WithSeries.Marker(Color=Color.Red, Style=MarkerStyle.Cross)
 
 // Generate a circle and save to clipboard
 [ let radius = 5.0
@@ -304,3 +304,45 @@ FSharpChart.Rows
 |> FSharpChart.WithStyle(Background = ChartStyles.Background.Solid Color.LightSteelBlue)
 
 
+// --------------------------------------------------------------------------------------
+// Some stuff around StackedCharts
+// -----------------------------------------------------------------------------------
+
+let rndStacked = new System.Random()
+let dataX() = [ for f in 1 .. 10 -> rndStacked.NextDouble() * 10.0]
+let dataXY() = [ for f in 1 .. 10 -> (f, round (rndStacked.NextDouble() * 100.0))]
+
+// Simple stacked chart
+FSharpChart.Combine
+  [ FSharpChart.StackedBar100(dataX(), StackedGroupName = "g1")
+    FSharpChart.StackedBar100(dataX(), StackedGroupName = "g1")
+    FSharpChart.StackedBar100(dataX(), StackedGroupName = "g2") ]
+
+// Multiple stacked charts
+FSharpChart.Combine
+  [ FSharpChart.StackedBar(dataX(), StackedGroupName = "g1")
+    FSharpChart.StackedBar(dataX(), StackedGroupName = "g1")
+    FSharpChart.StackedBar(dataX(), StackedGroupName = "g1")
+    FSharpChart.StackedBar(dataX(), StackedGroupName = "g2")
+    FSharpChart.StackedBar(dataX(), StackedGroupName = "g2") ]
+
+// Combined with lables
+FSharpChart.Combine
+  [ FSharpChart.StackedColumn(dataXY(), StackedGroupName = "g1")
+    |> FSharpChart.WithSeries.DataPoint(Label="#VAL")
+    FSharpChart.StackedColumn(dataXY(), StackedGroupName = "g1")
+    |> FSharpChart.WithSeries.DataPoint(Label="#VAL")
+    FSharpChart.StackedColumn(dataXY(), StackedGroupName = "g1")
+    |> FSharpChart.WithSeries.DataPoint(Label="#VAL") ]
+
+// Using list<list<'T>> bindings
+[dataXY(); dataXY()]
+|> FSharpChart.StackedArea
+|> FSharpChart.WithSeries.DataPoint(Label="#VAL")
+
+[dataXY(); dataXY(); dataXY()]
+|> FSharpChart.StackedColumn
+|> FSharpChart.WithSeries.DataPoint(Label="#VAL")
+
+[dataXY(); dataXY()]
+|> FSharpChart.StackedArea

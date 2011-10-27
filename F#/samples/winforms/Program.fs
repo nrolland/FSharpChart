@@ -10,4 +10,4 @@ module Main =
     do
         Application.EnableVisualStyles()
         Application.SetCompatibleTextRenderingDefault(false)
-        Application.Run(new CombineLineForm() :> Form) // Can also either CombineLineForm or BoxplotForm
+        Application.Run(new StackedForm() :> Form) // Can also either CombineLineForm or BoxplotForm or StackedForm
